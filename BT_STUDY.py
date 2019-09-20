@@ -203,7 +203,7 @@ def generate_adresses_hex(n):
 
 while ask != "n" and ask!= "N":
     clear()
-    tipo_generazione = input('PREMI 1 PER BINARIO O 2 PER ESADECIMALE ')
+    tipo_generazione = input('PRESS 1 FOR BINARY OR 2 FOR EXADECIMAL ')
 #    print (tipo_generazione)
 #    sleep(5)
     if tipo_generazione == "1":
