@@ -65,10 +65,81 @@ def get_public_address(public_key):
     address = h.digest()
     return address
 
-    
-def generate_adresses(n):
+def generate_adresses_bin(n):
     addresses = list()
-    print ("-- GENERATING PRIVATE KEY (HEX) --")
+    print ("-- GENERATING PRIVATE KEY (BIN) 256 BIT --")
+    sleep(2) 
+    for i in range(n):
+        n = 256
+        alphabet = "01"
+        s = ""
+        clear()
+        for i in range(n):
+            clear()
+            s += random.choice(alphabet)
+            print ("-- GENERATING PRIVATE KEY (BIN) 256 BIT --")
+            print("")
+            print (s)
+            sleep(0.05) 
+        binario = int(s, base=2) 
+        binario2 = hex(binario) 
+#        print (binario2)
+        esad = str(binario2[2:])
+        s = esad
+        print ("")
+        print ("PRIVATE KEY (HEX)")
+        print ("")
+        print (s)
+        try:
+            print("")
+            private_key = get_private_key(s)
+#            print("PRIVATE KEY (HEX): = " + private_key.hex())
+#            print ("")
+
+            print ("-- GENERATING PUBLIC KEY (HEX) --")
+            sleep(2) 
+            print ("")
+            public_key = get_public_key(private_key)
+            print(public_key.hex())
+            print ("")
+
+            print ("-- GENERATING PUBLIC ADDRESS (HEX) --")
+            sleep(2) 
+            print ("")
+            public_address = get_public_address(public_key)
+            print(public_address.hex())
+
+            print ("")
+            print ("-- GENERATING BITCOIN ADDRESS (BASE58 starts with 1) --")
+            sleep(2) 
+            print ("")
+
+            bitcoin_address = base58_encode("00", public_address)
+            print(bitcoin_address)
+            chiave = base58_encode("80", private_key)  # vedi https://en.bitcoin.it/wiki/List_of_address_prefixes
+            print ("")
+
+            print ("-- GENERATING BITCOIN PRIVATE KEY (BASE58 starts with 5) --")
+            sleep(2) 
+            print ("")
+            print(chiave)
+            addresses.append([bitcoin_address, public_key, private_key, chiave])
+            
+
+        except KeyboardInterrupt:
+            print("Bye")
+            sys.exit()
+        except:
+            print("Failed to create address " + s)
+#    bitcoin_address="18XrReT5ChW8qgXecNgKTU5T6MrMMLnV8H"
+    contents = urllib.request.urlopen("https://blockchain.info/q/getreceivedbyaddress/" + bitcoin_address).read()
+    print("")
+    print("BITCOIN IN ADDRESS: = " + str(contents.decode('UTF8')))
+    return addresses
+    
+def generate_adresses_hex(n):
+    addresses = list()
+    print ("-- GENERATING PRIVATE KEY (HEX) 64 CHAR --")
     sleep(2) 
     for i in range(n):
         n = 64
@@ -78,7 +149,7 @@ def generate_adresses(n):
         for i in range(n):
             clear()
             s += random.choice(alphabet)
-            print ("-- GENERATING PRIVATE KEY (HEX) --")
+            print ("-- GENERATING PRIVATE KEY (HEX) 64 CHAR --")
             print("")
             print (s)
             sleep(0.05) 
@@ -132,6 +203,14 @@ def generate_adresses(n):
 
 while ask != "n" and ask!= "N":
     clear()
-    generate_adresses(1)
+    tipo_generazione = input('PREMI 1 PER BINARIO O 2 PER ESADECIMALE ')
+#    print (tipo_generazione)
+#    sleep(5)
+    if tipo_generazione == "1":
+        clear()
+        generate_adresses_bin(1)
+    else:
+        clear()
+        generate_adresses_hex(1)
     ask = input('Continue? Y/N ')
 
